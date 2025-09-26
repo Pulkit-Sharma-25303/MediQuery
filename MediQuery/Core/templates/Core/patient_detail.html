@@ -1,0 +1,110 @@
+{% extends 'Core/base.html' %}
+
+{% block title %}{{ patient.name }}'s Details{% endblock %}
+
+{% block content %}
+    <a href="{% url 'Patient List' %}" class="btn btn-secondary" style="margin-bottom: 20px;">&larr; Back to List</a>
+    
+    <div class="card">
+        <h1>{{ patient.name }}</h1>
+        <p><strong>Age:</strong> {{ patient.age }}</p>
+        <p><strong>Blood Type:</strong> {{ patient.blood_type }}</p>
+        <p><strong>Allergies:</strong> {{ patient.allergies|linebreaksbr|default:"None listed" }}</p>
+    </div>
+
+    <form method="post" action="{% url 'Patient Detail' patient.slug %}">
+        {% csrf_token %}
+
+        <div class="card mt-20">
+            <h2>🤖 MediQuery - Healthcare AI</h2>
+            <p>Select reports below, then ask a question. The AI will consider all medical records, medications, and your selected reports in its analysis.</p>
+            
+            <textarea name="query" class="form-control" rows="3" placeholder="e.g., 'Summarize the selected reports.' or 'Based on the blood test and current medications, are there any contraindications?'" required></textarea>
+            <button type="submit" class="btn mt-20">Analyze Selected Records</button>
+
+            {% if ai_response %}
+            <div class="ai-response mt-20" style="background-color: #eef7ff; border-left: 5px solid #007bff; padding: 15px; border-radius: 5px;">
+                <h4>Analysis Result:</h4>
+                <p>{{ ai_response|linebreaksbr }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="card mt-20">
+            <h2>📋 Select Reports to Include in Analysis</h2>
+            <a href="{% url 'Upload Medical Report' patient.slug %}" class="btn">Upload New Report</a>
+            <table style="width: 100%; margin-top: 20px;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #dee2e6;">
+                        <th style="width: 30px; text-align: left; padding: 8px;">Include</th>
+                        <th style="text-align: left; padding: 8px;">Test Name & Summary</th>
+                        <th style="text-align: left; padding: 8px;">Date Uploaded</th>
+                        <th style="text-align: left; padding: 8px;">File</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in reports %}
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; text-align: center;">
+                            <input type="checkbox" name="selected_reports" value="{{ report.report_id }}" style="transform: scale(1.5);">
+                        </td>
+                        <td style="padding: 8px;">
+                            <strong>{{ report.Test_Name }}</strong>
+                            {% if report.summary %}
+                                <details style="margin-top: 10px;">
+                                    <summary style="cursor: pointer; font-weight: bold; color: #0056b3;">View AI Summary</summary>
+                                    <p style="margin-top: 5px; padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+                                        {{ report.summary|linebreaksbr }}
+                                    </p>
+                                </details>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 8px;">{{ report.date_uploaded|date:"F j, Y" }}</td>
+                        <td style="padding: 8px;">
+                            <a href="{{ report.report_file.url }}" target="_blank">View/Download</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="padding: 8px; text-align: center;">No reports have been uploaded for this patient.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <div class="card mt-20">
+        <h2>Medical Records</h2>
+        <a href="{% url 'Create Medical Record' patient.slug %}" class="btn">Add New Medical Record</a>
+        {% for record in records %}
+            <div class="card mt-20">
+                <p><strong>Diagnosis:</strong> {{ record.diagnosis }}</p>
+                <p><strong>Treatment:</strong> {{ record.treatment }}</p>
+                <p class="text-muted">Date: {{ record.date_created|date:"F j, Y, g:i a" }}</p>
+            </div>
+        {% empty %}
+            <p class="mt-20">No medical records found for this patient.</p>
+        {% endfor %}
+    </div>
+
+    <div class="card mt-20">
+        <h2>💊 Medications</h2>
+        {% if user.groups.all.0.name == 'Doctors' %}
+            <a href="{% url 'Add Medication' patient.slug %}" class="btn">Add New Medication</a>
+        {% endif %}
+
+        {% for med in medications %}
+            <div class="card mt-20">
+                <h4>{{ med.medicine_name }}</h4>
+                <p><strong>Dosage:</strong> {{ med.dosage }}</p>
+                <p><strong>Instructions:</strong> {{ med.instructions }}</p>
+                <p class="text-muted">
+                    Prescribed by: Dr. {{ med.prescribed_by.name }} on {{ med.date_prescribed|date:"F j, Y" }}
+                </p>
+            </div>
+        {% empty %}
+            <p class="mt-20">No medications have been prescribed for this patient.</p>
+        {% endfor %}
+    </div>
+
+{% endblock %}

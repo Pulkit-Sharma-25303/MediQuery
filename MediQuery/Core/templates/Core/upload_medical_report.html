@@ -1,0 +1,14 @@
+{% extends 'Core/base.html' %}
+
+{% block title %}Upload Medical Report{% endblock %}
+
+{% block content %}
+    <h1>Upload Medical Report</h1>
+    <p>Please select the patient, enter the test name, and choose the report file to upload.</p>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Upload Report</button>
+    </form>
+{% endblock %}

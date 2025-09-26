@@ -1,0 +1,12 @@
+{% extends 'Core/base.html' %}
+
+{% block title %}Add Medical Record{% endblock %}
+
+{% block content %}
+    <h1>Add a New Medical Record</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Save Record</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'Core/base.html' %}
+
+{% block title %}Welcome to MediQuery{% endblock %}
+
+{% block content %}
+    <div class="card" style="text-align: center; padding: 40px 20px; background-color: #eef7ff;">
+        <h1 style="font-size: 2.5em; margin-bottom: 10px;">Welcome to MediQuery</h1>
+        <p style="font-size: 1.2em; color: #555;">Your Centralized Hub for Patient and Doctor Management</p>
+        <div class="mt-20">
+            <a href="{% url 'Patient List' %}" class="btn" style="padding: 15px 30px; font-size: 1.1em;">View Patients</a>
+            <a href="{% url 'Doctor List' %}" class="btn btn-secondary" style="padding: 15px 30px; font-size: 1.1em; margin-left: 10px;">View Doctors</a>
+        </div>
+    </div>
+
+    <div style="margin-top: 40px;">
+        <h2 style="text-align: center; font-size: 2em; margin-bottom: 30px;">Core Features</h2>
+        <div style="display: flex; justify-content: space-between; gap: 20px;">
+            
+            <div class="card" style="flex: 1; text-align: center;">
+                <h3>Patient Records</h3>
+                <p>Easily add, view, and manage comprehensive patient profiles and their complete medical history.</p>
+            </div>
+
+            <div class="card" style="flex: 1; text-align: center;">
+                <h3>Doctor Directory</h3>
+                <p>Maintain a detailed directory of all doctors, their specialties, and their assigned patients.</p>
+            </div>
+
+            <div class="card" style="flex: 1; text-align: center;">
+                <h3>AI-Powered Analysis</h3>
+                <p>Leverage the power of local AI to summarize and query patient medical records instantly.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

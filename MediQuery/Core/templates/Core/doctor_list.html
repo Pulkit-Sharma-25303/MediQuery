@@ -1,0 +1,19 @@
+{% extends 'Core/base.html' %}
+
+{% block title %}Doctor List{% endblock %}
+
+{% block content %}
+    <h1>Doctor List</h1>
+    {% for doctor in doctors %}
+        <div class="card">
+            <div class="card-header">
+                <h2>
+                    <a href="{% url 'Doctor Detail' doctor.slug %}">{{ doctor.name }}</a>
+                </h2>
+            </div>
+            <p><strong>Specialty:</strong> {{ doctor.specialty }}</p>
+        </div>
+    {% empty %}
+        <p>No doctors have been registered yet.</p>
+    {% endfor %}
+{% endblock %}

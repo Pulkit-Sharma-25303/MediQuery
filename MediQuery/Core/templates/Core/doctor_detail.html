@@ -1,0 +1,29 @@
+{% extends 'Core/base.html' %}
+
+{% block title %}{{ doctor.name }}'s Details{% endblock %}
+
+{% block content %}
+    <a href="{% url 'Doctor List' %}" class="btn btn-secondary" style="margin-bottom: 20px;">&larr; Back to List</a>
+    
+    <div class="card">
+        <h1>Dr. {{ doctor.name }}</h1>
+        <p><strong>Specialty:</strong> {{ doctor.specialty }}</p>
+        <p><strong>Contact Info:</strong> {{ doctor.contact_info|linebreaksbr }}</p>
+    </div>
+
+    <h2>Assigned Patients</h2>
+    
+    {% for patient in patients %}
+        <div class="card mt-20">
+            <div class="card-header">
+                <h2>
+                    <a href="{% url 'Patient Detail' patient.slug %}">{{ patient.name }}</a>
+                </h2>
+            </div>
+            <p><strong>Age:</strong> {{ patient.age }}</p>
+            <p><strong>Blood Type:</strong> {{ patient.blood_type }}</p>
+        </div>
+    {% empty %}
+        <p class="mt-20">No patients are currently assigned to this doctor.</p>
+    {% endfor %}
+{% endblock %}
