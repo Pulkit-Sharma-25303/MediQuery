@@ -39,8 +39,8 @@ MediQuery is a full-stack web application designed to centralize patient and doc
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/your-username/mediquery.git
-cd mediquery
+git clone https://github.com/Pulkit-Sharma-25303/MediQuery.git
+cd MediQuery
 ```
 
 2. **Set up a virtual environment and install dependencies**
@@ -125,4 +125,5 @@ The application will be available at **[http://127.0.0.1:8000/](http://127.0.0.1
 ## License
 
 This project is licensed under the **MIT License**.
+
 
